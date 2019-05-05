@@ -2,7 +2,7 @@
 
 Test case for [libvips/libvips#703](https://github.com/libvips/libvips/issues/703).
 
-The example images for the various EXIF orientation flags are taken from this repo:
+The example images for the various EXIF orientation flags are taken from this repo:  
 https://github.com/recurser/exif-orientation-examples
 
 ## Build
@@ -32,5 +32,5 @@ G_MESSAGES_DEBUG=all ./test-anim
 See [output/](output) directory.
 
 ## Output
-![Landscape](output/Landscape.webp)
 ![Portrait](output/Portrait.webp)
+![Landscape](output/Landscape.webp)

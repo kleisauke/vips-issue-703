@@ -95,7 +95,7 @@ int main(int argc, const char *argv[]) {
 
     VImage portrait = VImage::black(320, 480 * 8);
 
-    // Landscape
+    // Portrait
     for (int i = 1; i <= 8; ++i) {
         int width = 320;
         int height = 480;
