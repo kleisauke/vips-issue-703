@@ -65,11 +65,10 @@ int main(int argc, const char *argv[]) {
     // Landscape
     for (int i = 1; i <= 8; ++i) {
         int width = 320;
-        int height = 240;
+        int height = 213;
 
         std::string input = "input/Landscape_" + std::to_string(i) + ".jpg";
-        std::string output =
-            "output/Landscape_" + std::to_string(i) + "-out.jpg";
+        std::string output = "output/Landscape_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
             // Swap input width and height when rotating by 90 or 270 degrees.
@@ -91,11 +90,10 @@ int main(int argc, const char *argv[]) {
     // Portrait
     for (int i = 1; i <= 8; ++i) {
         int width = 320;
-        int height = 427;
+        int height = 480;
 
         std::string input = "input/Portrait_" + std::to_string(i) + ".jpg";
-        std::string output =
-            "output/Portrait_" + std::to_string(i) + "-out.jpg";
+        std::string output = "output/Portrait_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
             // Swap input width and height when rotating by 90 or 270 degrees.
