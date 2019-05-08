@@ -62,12 +62,15 @@ int main(int argc, const char *argv[]) {
         vips_error_exit(nullptr);
     }
 
+    const std::string input_dir = "input";
+    const int target_width = 320;
+    
     // Landscape
     for (int i = 1; i <= 8; ++i) {
-        int width = 320;
-        int height = 213;
+        int width = target_width;
+        int height = VIPS_MAX_COORD;
 
-        std::string input = "input/Landscape_" + std::to_string(i) + ".jpg";
+        std::string input = input_dir + "/Landscape_" + std::to_string(i) + ".jpg";
         std::string output = "output/Landscape_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
@@ -89,10 +92,10 @@ int main(int argc, const char *argv[]) {
 
     // Portrait
     for (int i = 1; i <= 8; ++i) {
-        int width = 320;
-        int height = 480;
+        int width = target_width;
+        int height = VIPS_MAX_COORD;
 
-        std::string input = "input/Portrait_" + std::to_string(i) + ".jpg";
+        std::string input = input_dir + "/Portrait_" + std::to_string(i) + ".jpg";
         std::string output = "output/Portrait_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {

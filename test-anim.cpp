@@ -21,7 +21,7 @@ int main(int argc, const char *argv[]) {
     VImage landscape =
         VImage::arrayjoin(landscape_images, VImage::option()->set("across", 1));
 
-    landscape.set(VIPS_META_PAGE_HEIGHT, 213);
+    landscape.set(VIPS_META_PAGE_HEIGHT, VIPS_RINT(landscape.height() / 8.0));
     landscape.set(VIPS_META_N_PAGES, 8);
     landscape.set("gif-delay", 20);
     landscape.write_to_file("output/Landscape.webp",
@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
     VImage portrait =
         VImage::arrayjoin(portrait_images, VImage::option()->set("across", 1));
 
-    portrait.set(VIPS_META_PAGE_HEIGHT, 480);
+    portrait.set(VIPS_META_PAGE_HEIGHT, VIPS_RINT(portrait.height() / 8.0));
     portrait.set(VIPS_META_N_PAGES, 8);
     portrait.set("gif-delay", 20);
     portrait.write_to_file("output/Portrait.webp",
