@@ -73,7 +73,7 @@ index 1111111..2222222 100644
 -	if( reducev->centre )
 -		height += 1;
 +	int shift = reducev->centre ? 1 : 0;
-+	
++
 +	height = in->Ysize + reducev->n_point - 1 + shift;
  	if( vips_embed( in, &t[1], 
 -		0, reducev->n_point / 2 - 1, 

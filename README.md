@@ -199,37 +199,75 @@ See [output/](output) directory.
 </details>
 
 ## Output
-*Produces pixel shifts*
 
-![Portrait](output/Portrait.webp)
-![Landscape](output/Landscape.webp)
+### Thumbnail
+<details>
+  <summary>Produces pixel shifts</summary>
 
-## Corner vs center convention (portrait)
-*Corner convention seems to produce more pixel shifts*
+  ![Portrait](output/Portrait.webp)
+  ![Landscape](output/Landscape.webp)
+</details>
 
-![Portrait-corner](output/Portrait-corner.webp)
-![Portrait](output/Portrait.webp)
+### Corner vs center convention (portrait)
+<details>
+  <summary>Corner convention seems to produce more pixel shifts</summary>
 
-## Shrink an image vertically
-*Produces pixel shifts on the vertical axis*
+  ![Portrait-corner](output/Portrait-corner.webp)
+  ![Portrait](output/Portrait.webp)
+</details>
 
-![Portrait-vertical](output/Portrait-vertical.webp)
+### Shrink an image vertically
+<details>
+  <summary>Produces pixel shifts on the vertical axis</summary>
 
-## Shrink an image horizontally
-*Produces pixel shifts on the horizontal axis*
+  ![Portrait-vertical](output/Portrait-vertical.webp)
+</details>
 
-![Portrait-horizontal](output/Portrait-horizontal.webp)
+### Shrink an image horizontally
+<details>
+  <summary>Produces pixel shifts on the horizontal axis</summary>
 
-## Upscale
-*Upscale does not appear to produce pixel shifts*
+  ![Portrait-horizontal](output/Portrait-horizontal.webp)
+</details>
 
-![Portrait](output/Portrait-enlarge.webp)
-![Landscape](output/Landscape-enlarge.webp)
+### Upscale
+<details>
+  <summary>Upscale does not appear to produce pixel shifts</summary>
 
-## After patching
-*Portrait seems to be fixed, landscape not*
+  ![Portrait](output/Portrait-enlarge.webp)
+  ![Landscape](output/Landscape-enlarge.webp)
+</details>
+
+## Output after patching
 
 See this [patch](0001-partially-fix.patch).
 
-![Portrait](output/Portrait-patch.webp)
-![Landscape](output/Landscape-patch.webp)
+### Thumbnail
+<details>
+  <summary>Portrait seems to be fixed, landscape not</summary>
+
+  ![Portrait](output-patch/Portrait.webp)
+  ![Landscape](output-patch/Landscape.webp)
+</details>
+
+### Corner vs center convention (portrait)
+<details>
+  <summary>Corner convention still produces pixel shifts</summary>
+
+  ![Portrait-corner](output-patch/Portrait-corner.webp)
+  ![Portrait](output-patch/Portrait.webp)
+</details>
+
+### Shrink an image vertically
+<details>
+  <summary>Still produces pixel shifts on the vertical axis</summary>
+
+  ![Portrait-vertical](output-patch/Portrait-vertical.webp)
+</details>
+
+### Shrink an image horizontally
+<details>
+  <summary>Still produces pixel shifts on the horizontal axis</summary>
+
+  ![Portrait-horizontal](output-patch/Portrait-horizontal.webp)
+</details>
