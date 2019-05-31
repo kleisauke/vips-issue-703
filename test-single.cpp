@@ -64,13 +64,16 @@ int main(int argc, const char *argv[]) {
 
     const std::string input_dir = "input";
     const int target_width = 320;
-    
+
+    const bool skip_shrink_on_load = true;
+
     // Landscape
     for (int i = 1; i <= 8; ++i) {
         int width = target_width;
         int height = VIPS_MAX_COORD;
 
-        std::string input = input_dir + "/Landscape_" + std::to_string(i) + ".jpg";
+        std::string input =
+            input_dir + "/Landscape_" + std::to_string(i) + ".jpg";
         std::string output = "output/Landscape_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
@@ -78,11 +81,23 @@ int main(int argc, const char *argv[]) {
             std::swap(width, height);
         }
 
-        VImage thumb = VImage::thumbnail(input.c_str(), width,
-                                         VImage::option()
-                                             ->set("no_rotate", false)
-                                             ->set("height", height)
-                                             ->set("size", VIPS_SIZE_DOWN));
+        VImage thumb;
+        if (skip_shrink_on_load) {
+            VImage image = VImage::new_from_file(
+                input.c_str(),
+                VImage::option()->set("access", VIPS_ACCESS_SEQUENTIAL));
+            thumb =
+                image.thumbnail_image(width, VImage::option()
+                                                 ->set("no_rotate", false)
+                                                 ->set("height", height)
+                                                 ->set("size", VIPS_SIZE_DOWN));
+        } else {
+            thumb = VImage::thumbnail(input.c_str(), width,
+                                      VImage::option()
+                                          ->set("no_rotate", false)
+                                          ->set("height", height)
+                                          ->set("size", VIPS_SIZE_DOWN));
+        }
 
         thumb = autorot_enhanced(thumb, i);
 
@@ -95,7 +110,8 @@ int main(int argc, const char *argv[]) {
         int width = target_width;
         int height = VIPS_MAX_COORD;
 
-        std::string input = input_dir + "/Portrait_" + std::to_string(i) + ".jpg";
+        std::string input =
+            input_dir + "/Portrait_" + std::to_string(i) + ".jpg";
         std::string output = "output/Portrait_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
@@ -103,11 +119,23 @@ int main(int argc, const char *argv[]) {
             std::swap(width, height);
         }
 
-        VImage thumb = VImage::thumbnail(input.c_str(), width,
-                                         VImage::option()
-                                             ->set("no_rotate", false)
-                                             ->set("height", height)
-                                             ->set("size", VIPS_SIZE_DOWN));
+        VImage thumb;
+        if (skip_shrink_on_load) {
+            VImage image = VImage::new_from_file(
+                input.c_str(),
+                VImage::option()->set("access", VIPS_ACCESS_SEQUENTIAL));
+            thumb =
+                image.thumbnail_image(width, VImage::option()
+                                                 ->set("no_rotate", false)
+                                                 ->set("height", height)
+                                                 ->set("size", VIPS_SIZE_DOWN));
+        } else {
+            thumb = VImage::thumbnail(input.c_str(), width,
+                                      VImage::option()
+                                          ->set("no_rotate", false)
+                                          ->set("height", height)
+                                          ->set("size", VIPS_SIZE_DOWN));
+        }
 
         thumb = autorot_enhanced(thumb, i);
 
