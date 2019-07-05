@@ -37,164 +37,66 @@ See [output/](output) directory.
 <details>
   <summary>Notes</summary>
 
-  Corner convention:
+  Only shrink an image vertically (using only `reducev`):
   ```bash
-  vips reducev input/Portrait_1.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v output/Portrait_1.jpg[strip,Q=85] 3.749995313 --kernel lanczos3
+  vips reducev input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
-  vips reducev input/Portrait_2.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips flip temp2.v output/Portrait_2.jpg[strip,Q=85] horizontal
+  vips reducev input/Landscape_2.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp.v output-patch/Landscape_2.jpg[strip,Q=85] horizontal
 
-  vips reducev input/Portrait_3.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v output/Portrait_3.jpg[strip,Q=85] d180
+  vips reducev input/Landscape_3.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips rot temp.v output-patch/Landscape_3.jpg[strip,Q=85] d180
 
-  vips reducev input/Portrait_4.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v temp3.v d180
-  vips flip temp3.v output/Portrait_4.jpg[strip,Q=85] horizontal
-
-  vips reducev input/Portrait_5.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v temp3.v d270
-  vips flip temp3.v output/Portrait_5.jpg[strip,Q=85] vertical
-
-  vips reducev input/Portrait_6.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v output/Portrait_6.jpg[strip,Q=85] d90
-
-  vips reducev input/Portrait_7.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v temp3.v d90
-  vips flip temp3.v output/Portrait_7.jpg[strip,Q=85] vertical
-
-  vips reducev input/Portrait_8.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3
-  vips rot temp2.v output/Portrait_8.jpg[strip,Q=85] d270
-
-  rm {temp,temp2,temp3}.v
-  ```
-
-  Centre convention:
-  ```bash
-  vips reducev input/Portrait_1.jpg temp.v 3.749995313 --kernel lanczos3
-  vips reduceh temp.v output/Portrait_1.jpg[strip,Q=85] 3.749995313 --kernel lanczos3 --centre
-
-  vips reducev input/Portrait_2.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3  --centre
-  vips flip temp2.v output/Portrait_2.jpg[strip,Q=85] horizontal
-
-  vips reducev input/Portrait_3.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v output/Portrait_3.jpg[strip,Q=85] d180
-
-  vips reducev input/Portrait_4.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v temp3.v d180
-  vips flip temp3.v output/Portrait_4.jpg[strip,Q=85] horizontal
-
-  vips reducev input/Portrait_5.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v temp3.v d270
-  vips flip temp3.v output/Portrait_5.jpg[strip,Q=85] vertical
-
-  vips reducev input/Portrait_6.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v output/Portrait_6.jpg[strip,Q=85] d90
-
-  vips reducev input/Portrait_7.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v temp3.v d90
-  vips flip temp3.v output/Portrait_7.jpg[strip,Q=85] vertical
-
-  vips reducev input/Portrait_8.jpg temp.v 3.749995313 --kernel lanczos3 --centre
-  vips reduceh temp.v temp2.v 3.749995313 --kernel lanczos3 --centre
-  vips rot temp2.v output/Portrait_8.jpg[strip,Q=85] d270
-
-  rm {temp,temp2,temp3}.v
-  ```
-
-  Only shrink an image vertically (using both `reducev / reduceh`):
-  ```bash
-  vips reducev input/Portrait_1.jpg output/Portrait_1.jpg[strip,Q=85] 3.749995313 --kernel lanczos3
-
-  vips reducev input/Portrait_2.jpg temp.v 3.749995313 --kernel lanczos3
-  vips flip temp.v output/Portrait_2.jpg[strip,Q=85] horizontal
-
-  vips reducev input/Portrait_3.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_3.jpg[strip,Q=85] d180
-
-  vips reducev input/Portrait_4.jpg temp.v 3.749995313 --kernel lanczos3
+  vips reducev input/Landscape_4.jpg temp.v 5.624992969 --kernel lanczos3 --centre
   vips rot temp.v temp2.v d180
-  vips flip temp2.v output/Portrait_4.jpg[strip,Q=85] horizontal
+  vips flip temp2.v output-patch/Landscape_4.jpg[strip,Q=85] horizontal
 
-  vips reduceh input/Portrait_5.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v temp2.v d270
-  vips flip temp2.v output/Portrait_5.jpg[strip,Q=85] vertical
+  vips rot input/Landscape_5.jpg temp.v d270
+  vips reducev temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp2.v output-patch/Landscape_5.jpg[strip,Q=85] vertical
 
-  vips reduceh input/Portrait_6.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_6.jpg[strip,Q=85] d90
+  vips rot input/Landscape_6.jpg temp.v d90
+  vips reducev temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
-  vips reduceh input/Portrait_7.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v temp2.v d90
-  vips flip temp2.v output/Portrait_7.jpg[strip,Q=85] vertical
+  vips rot input/Landscape_7.jpg temp.v d90
+  vips reducev temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp2.v output-patch/Landscape_7.jpg[strip,Q=85] vertical
 
-  vips reduceh input/Portrait_8.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_8.jpg[strip,Q=85] d270
+  vips rot input/Landscape_8.jpg temp.v  d270
+  vips reducev temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
   rm {temp,temp2}.v
   ```
 
-  Only shrink an image horizontally (using both `reducev / reduceh`):
+  Only shrink an image horizontally (using only `reduceh`):
   ```bash
-  vips reduceh input/Portrait_1.jpg output/Portrait_1.jpg[strip,Q=85] 3.749995313 --kernel lanczos3
+  vips reduceh input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
-  vips reduceh input/Portrait_2.jpg temp.v 3.749995313 --kernel lanczos3
-  vips flip temp.v output/Portrait_2.jpg[strip,Q=85] horizontal
+  vips reduceh input/Landscape_2.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp.v output-patch/Landscape_2.jpg[strip,Q=85] horizontal
 
-  vips reduceh input/Portrait_3.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_3.jpg[strip,Q=85] d180
+  vips reduceh input/Landscape_3.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips rot temp.v output-patch/Landscape_3.jpg[strip,Q=85] d180
 
-  vips reduceh input/Portrait_4.jpg temp.v 3.749995313 --kernel lanczos3
+  vips reduceh input/Landscape_4.jpg temp.v 5.624992969 --kernel lanczos3 --centre
   vips rot temp.v temp2.v d180
-  vips flip temp2.v output/Portrait_4.jpg[strip,Q=85] horizontal
+  vips flip temp2.v output-patch/Landscape_4.jpg[strip,Q=85] horizontal
 
-  vips reducev input/Portrait_5.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v temp2.v d270
-  vips flip temp2.v output/Portrait_5.jpg[strip,Q=85] vertical
+  vips rot input/Landscape_5.jpg temp.v d270
+  vips reduceh temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp2.v output-patch/Landscape_5.jpg[strip,Q=85] vertical
 
-  vips reducev input/Portrait_6.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_6.jpg[strip,Q=85] d90
+  vips rot input/Landscape_6.jpg temp.v d90
+  vips reduceh temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
-  vips reducev input/Portrait_7.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v temp2.v d90
-  vips flip temp2.v output/Portrait_7.jpg[strip,Q=85] vertical
+  vips rot input/Landscape_7.jpg temp.v d90
+  vips reduceh temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips flip temp2.v output-patch/Landscape_7.jpg[strip,Q=85] vertical
 
-  vips reducev input/Portrait_8.jpg temp.v 3.749995313 --kernel lanczos3
-  vips rot temp.v output/Portrait_8.jpg[strip,Q=85] d270
+  vips rot input/Landscape_8.jpg temp.v d270
+  vips reduceh temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
 
   rm {temp,temp2}.v
-  ```
-
-  ImageMagick6 test:
-  ```bash
-  convert -define jpeg:size=1200x1800  input/Portrait_1.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_1.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_2.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_2.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_3.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_3.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_4.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_4.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_5.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_5.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_6.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_6.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_7.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_7.jpg
-  convert -define jpeg:size=1200x1800  input/Portrait_8.jpg  -auto-orient \
-          -thumbnail 320x480 -quality 85 output/Portrait_8.jpg
   ```
 </details>
 
@@ -208,26 +110,18 @@ See [output/](output) directory.
   ![Landscape](output/Landscape.webp)
 </details>
 
-### Corner vs center convention (portrait)
-<details>
-  <summary>Corner convention seems to produce more pixel shifts</summary>
-
-  ![Portrait-corner](output/Portrait-corner.webp)
-  ![Portrait](output/Portrait.webp)
-</details>
-
 ### Shrink an image vertically
 <details>
   <summary>Produces pixel shifts on the vertical axis</summary>
 
-  ![Portrait-vertical](output/Portrait-vertical.webp)
+  ![Landscape-vertical](output/Landscape-vertical.webp)
 </details>
 
 ### Shrink an image horizontally
 <details>
   <summary>Produces pixel shifts on the horizontal axis</summary>
 
-  ![Portrait-horizontal](output/Portrait-horizontal.webp)
+  ![Landscape-horizontal](output/Landscape-horizontal.webp)
 </details>
 
 ### Upscale
@@ -240,7 +134,7 @@ See [output/](output) directory.
 
 ## Output after patching
 
-See this [patch](0001-partially-fix.patch).
+See this [patch](0001-Partially-fix-for-issue-703.patch).
 
 ### Thumbnail
 <details>
@@ -250,24 +144,16 @@ See this [patch](0001-partially-fix.patch).
   ![Landscape](output-patch/Landscape.webp)
 </details>
 
-### Corner vs center convention (portrait)
-<details>
-  <summary>Corner convention still produces pixel shifts</summary>
-
-  ![Portrait-corner](output-patch/Portrait-corner.webp)
-  ![Portrait](output-patch/Portrait.webp)
-</details>
-
 ### Shrink an image vertically
 <details>
   <summary>Still produces pixel shifts on the vertical axis</summary>
 
-  ![Portrait-vertical](output-patch/Portrait-vertical.webp)
+  ![Landscape-vertical](output-patch/Landscape-vertical.webp)
 </details>
 
 ### Shrink an image horizontally
 <details>
-  <summary>Still produces pixel shifts on the horizontal axis</summary>
+  <summary>Pixel shifts are gone</summary>
 
-  ![Portrait-horizontal](output-patch/Portrait-horizontal.webp)
+  ![Landscape-horizontal](output-patch/Landscape-horizontal.webp)
 </details>

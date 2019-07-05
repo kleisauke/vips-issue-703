@@ -63,6 +63,8 @@ int main(int argc, const char *argv[]) {
     }
 
     const std::string input_dir = "input";
+    const std::string output_dir = "output-patch";
+    /*const std::string output_dir = "output";*/
     const int target_width = 320;
 
     const bool skip_shrink_on_load = true;
@@ -74,7 +76,8 @@ int main(int argc, const char *argv[]) {
 
         std::string input =
             input_dir + "/Landscape_" + std::to_string(i) + ".jpg";
-        std::string output = "output/Landscape_" + std::to_string(i) + ".jpg";
+        std::string output =
+            output_dir + "/Landscape_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
             // Swap input width and height when rotating by 90 or 270 degrees.
@@ -112,7 +115,8 @@ int main(int argc, const char *argv[]) {
 
         std::string input =
             input_dir + "/Portrait_" + std::to_string(i) + ".jpg";
-        std::string output = "output/Portrait_" + std::to_string(i) + ".jpg";
+        std::string output =
+            output_dir + "/Portrait_" + std::to_string(i) + ".jpg";
 
         if (i == 5 || i == 7) {
             // Swap input width and height when rotating by 90 or 270 degrees.
