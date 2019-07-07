@@ -100,7 +100,7 @@ index 1111111..2222222 100644
  
  		for( int x = 0; x < r->width; x++ ) {
 -			int ix = (int) X;
-+			const int ix =  (int) X;
++			const int ix = (int) X;
  			VipsPel *p = p0 + ix * ps;
  			const int sx = X * VIPS_TRANSFORM_SCALE * 2;
  			const int six = sx & (VIPS_TRANSFORM_SCALE * 2 - 1);
@@ -133,7 +133,15 @@ index 1111111..2222222 100644
  		const int sy = Y * VIPS_TRANSFORM_SCALE * 2;
  		const int siy = sy & (VIPS_TRANSFORM_SCALE * 2 - 1);
  		const int ty = (siy + 1) >> 1;
-@@ -613,6 +615,8 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+@@ -606,13 +608,15 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+ 		case VIPS_FORMAT_DPCOMPLEX:
+ 		case VIPS_FORMAT_DOUBLE:
+ 			reducev_notab<double>( reducev,
+-				q, p, ne, lskip, Y - (int) Y );
++				q, p, ne, lskip, Y - py );
+ 			break;
+ 
+ 		default:
  			g_assert_not_reached();
  			break;
  		}
