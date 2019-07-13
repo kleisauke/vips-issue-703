@@ -56,3 +56,4 @@ CTestTestfile.cmake
 # User-specific stuff
 test-anim
 test-single
+tn_*.jpg
