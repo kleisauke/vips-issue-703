@@ -14,6 +14,15 @@ VImage autorot_enhanced(VImage &image, int exif_tag) {
     bool flop = false;
 
     switch (exif_tag) {
+    case 6:
+        rotate = VIPS_ANGLE_D90;
+        break;
+    case 3:
+        rotate = VIPS_ANGLE_D180;
+        break;
+    case 8:
+        rotate = VIPS_ANGLE_D270;
+        break;
     case 2: // flop 1
         flop = true;
         break;
@@ -33,11 +42,6 @@ VImage autorot_enhanced(VImage &image, int exif_tag) {
         break;
     }
 
-    // Remove EXIF Orientation from image, if mirroring is required.
-    if (flip || flop) {
-        image.remove(VIPS_META_ORIENTATION);
-    }
-
     // Rotate if required.
     if (rotate != VIPS_ANGLE_D0) {
         // Need to copy to memory, we have to stay seq.
@@ -54,7 +58,12 @@ VImage autorot_enhanced(VImage &image, int exif_tag) {
         image = image.fliphor();
     }
 
-    return image;
+    // Removing metadata, need to copy the image
+    auto copy = image.copy();
+
+    copy.remove(VIPS_META_ORIENTATION);
+
+    return copy;
 }
 
 int main(int argc, const char *argv[]) {
@@ -79,7 +88,7 @@ int main(int argc, const char *argv[]) {
         std::string output =
             output_dir + "/Landscape_" + std::to_string(i) + ".jpg";
 
-        if (i == 5 || i == 7) {
+        if (i >= 5) {
             // Swap input width and height when rotating by 90 or 270 degrees.
             std::swap(width, height);
         }
@@ -91,13 +100,13 @@ int main(int argc, const char *argv[]) {
                 VImage::option()->set("access", VIPS_ACCESS_SEQUENTIAL));
             thumb =
                 image.thumbnail_image(width, VImage::option()
-                                                 ->set("no_rotate", false)
+                                                 ->set("no_rotate", true)
                                                  ->set("height", height)
                                                  ->set("size", VIPS_SIZE_DOWN));
         } else {
             thumb = VImage::thumbnail(input.c_str(), width,
                                       VImage::option()
-                                          ->set("no_rotate", false)
+                                          ->set("no_rotate", true)
                                           ->set("height", height)
                                           ->set("size", VIPS_SIZE_DOWN));
         }
@@ -118,7 +127,7 @@ int main(int argc, const char *argv[]) {
         std::string output =
             output_dir + "/Portrait_" + std::to_string(i) + ".jpg";
 
-        if (i == 5 || i == 7) {
+        if (i >= 5) {
             // Swap input width and height when rotating by 90 or 270 degrees.
             std::swap(width, height);
         }
@@ -130,13 +139,13 @@ int main(int argc, const char *argv[]) {
                 VImage::option()->set("access", VIPS_ACCESS_SEQUENTIAL));
             thumb =
                 image.thumbnail_image(width, VImage::option()
-                                                 ->set("no_rotate", false)
+                                                 ->set("no_rotate", true)
                                                  ->set("height", height)
                                                  ->set("size", VIPS_SIZE_DOWN));
         } else {
             thumb = VImage::thumbnail(input.c_str(), width,
                                       VImage::option()
-                                          ->set("no_rotate", false)
+                                          ->set("no_rotate", true)
                                           ->set("height", height)
                                           ->set("size", VIPS_SIZE_DOWN));
         }

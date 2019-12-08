@@ -9,7 +9,7 @@ for i in range(1, 9):
     height = 10000000
 
     # Swap input width and height when rotating by 90 or 270 degrees.
-    if i == 5 or i == 6 or i == 7 or i == 8:
+    if i >= 5:
         width, height = height, width
 
     im.thumbnail((width,height), Image.LANCZOS)
@@ -31,7 +31,7 @@ for i in range(1, 9):
     height = 10000000
 
     # Swap input width and height when rotating by 90 or 270 degrees.
-    if i == 5 or i == 6 or i == 7 or i == 8:
+    if i >= 5:
         width, height = height, width
 
     im.thumbnail((width,height), Image.LANCZOS)
