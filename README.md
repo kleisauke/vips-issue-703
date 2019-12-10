@@ -39,62 +39,62 @@ See [output/](output) directory.
 
   Only shrink an image vertically (using only `reducev`):
   ```bash
-  vips reducev input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips reducev input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
-  vips reducev input/Landscape_2.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reducev input/Landscape_2.jpg temp.v 5.624992969 --kernel nearest --centre
   vips flip temp.v output-patch/Landscape_2.jpg[strip,Q=85] horizontal
 
-  vips reducev input/Landscape_3.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reducev input/Landscape_3.jpg temp.v 5.624992969 --kernel nearest --centre
   vips rot temp.v output-patch/Landscape_3.jpg[strip,Q=85] d180
 
-  vips reducev input/Landscape_4.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reducev input/Landscape_4.jpg temp.v 5.624992969 --kernel nearest --centre
   vips rot temp.v temp2.v d180
   vips flip temp2.v output-patch/Landscape_4.jpg[strip,Q=85] horizontal
 
   vips rot input/Landscape_5.jpg temp.v d270
-  vips reducev temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips reducev temp.v temp2.v 5.624992969 --kernel nearest --centre
   vips flip temp2.v output-patch/Landscape_5.jpg[strip,Q=85] vertical
 
   vips rot input/Landscape_6.jpg temp.v d90
-  vips reducev temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips reducev temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
   vips rot input/Landscape_7.jpg temp.v d90
-  vips reducev temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips reducev temp.v temp2.v 5.624992969 --kernel nearest --centre
   vips flip temp2.v output-patch/Landscape_7.jpg[strip,Q=85] vertical
 
-  vips rot input/Landscape_8.jpg temp.v  d270
-  vips reducev temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips rot input/Landscape_8.jpg temp.v d270
+  vips reducev temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
   rm {temp,temp2}.v
   ```
 
   Only shrink an image horizontally (using only `reduceh`):
   ```bash
-  vips reduceh input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips reduceh input/Landscape_1.jpg output-patch/Landscape_1.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
-  vips reduceh input/Landscape_2.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reduceh input/Landscape_2.jpg temp.v 5.624992969 --kernel nearest --centre
   vips flip temp.v output-patch/Landscape_2.jpg[strip,Q=85] horizontal
 
-  vips reduceh input/Landscape_3.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reduceh input/Landscape_3.jpg temp.v 5.624992969 --kernel nearest --centre
   vips rot temp.v output-patch/Landscape_3.jpg[strip,Q=85] d180
 
-  vips reduceh input/Landscape_4.jpg temp.v 5.624992969 --kernel lanczos3 --centre
+  vips reduceh input/Landscape_4.jpg temp.v 5.624992969 --kernel nearest --centre
   vips rot temp.v temp2.v d180
   vips flip temp2.v output-patch/Landscape_4.jpg[strip,Q=85] horizontal
 
   vips rot input/Landscape_5.jpg temp.v d270
-  vips reduceh temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips reduceh temp.v temp2.v 5.624992969 --kernel nearest --centre
   vips flip temp2.v output-patch/Landscape_5.jpg[strip,Q=85] vertical
 
   vips rot input/Landscape_6.jpg temp.v d90
-  vips reduceh temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips reduceh temp.v output-patch/Landscape_6.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
   vips rot input/Landscape_7.jpg temp.v d90
-  vips reduceh temp.v temp2.v 5.624992969 --kernel lanczos3 --centre
+  vips reduceh temp.v temp2.v 5.624992969 --kernel nearest --centre
   vips flip temp2.v output-patch/Landscape_7.jpg[strip,Q=85] vertical
 
   vips rot input/Landscape_8.jpg temp.v d270
-  vips reduceh temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel lanczos3 --centre
+  vips reduceh temp.v output-patch/Landscape_8.jpg[strip,Q=85] 5.624992969 --kernel nearest --centre
 
   rm {temp,temp2}.v
   ```
@@ -106,8 +106,8 @@ See [output/](output) directory.
 <details>
   <summary>Produces pixel shifts</summary>
 
-  ![Portrait](output/Portrait.webp)
-  ![Landscape](output/Landscape.webp)
+  ![Portrait](output/lanczos3_Portrait.webp)
+  ![Landscape](output/lanczos3_Landscape.webp)
 </details>
 
 ### Shrink an image vertically
@@ -140,8 +140,8 @@ See this [patch](0001-Partially-fix-for-issue-703.patch).
 <details>
   <summary>Portrait seems to be fixed, landscape not</summary>
 
-  ![Portrait](output-patch/Portrait.webp)
-  ![Landscape](output-patch/Landscape.webp)
+  ![Portrait](output-patch/lanczos3_Portrait.webp)
+  ![Landscape](output-patch/lanczos3_Landscape.webp)
 </details>
 
 ### Shrink an image vertically

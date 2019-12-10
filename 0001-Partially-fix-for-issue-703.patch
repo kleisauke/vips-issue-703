@@ -150,15 +150,17 @@ index 1111111..2222222 100644
  	}
  
  	VIPS_GATE_STOP( "vips_reducev_gen: work" ); 
-@@ -634,6 +638,7 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+@@ -633,7 +637,9 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+ 	Sequence *seq = (Sequence *) vseq;
  	VipsRegion *ir = seq->ir;
  	VipsRect *r = &out_region->valid;
++
  	int ne = r->width * in->Bands;
 +	const double offset = reducev->centre ? 0.5 : 0.0;
  
  	VipsExecutor executor[MAX_PASS];
  	VipsRect s;
-@@ -663,11 +668,11 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+@@ -663,11 +669,11 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
  
  	VIPS_GATE_START( "vips_reducev_vector_gen: work" ); 
  
@@ -172,7 +174,16 @@ index 1111111..2222222 100644
  		const int py = (int) Y; 
  		const int sy = Y * VIPS_TRANSFORM_SCALE * 2;
  		const int siy = sy & (VIPS_TRANSFORM_SCALE * 2 - 1);
-@@ -709,6 +714,8 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+@@ -682,7 +688,7 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+ 		printf( "first column of pixel values:\n" ); 
+ 		for( int i = 0; i < reducev->n_point; i++ ) 
+ 			printf( "\t%d - %d\n", i, 
+-				*VIPS_REGION_ADDR( ir, r->left, r->top + y + i ) ); 
++				*VIPS_REGION_ADDR( ir, r->left, py ) ); 
+ #endif /*DEBUG_PIXELS*/
+ 
+ 		/* We run our n passes to generate this scanline.
+@@ -709,6 +715,8 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
  		printf( "pixel result:\n" );
  		printf( "\t%d\n", *q ); 
  #endif /*DEBUG_PIXELS*/
@@ -181,7 +192,7 @@ index 1111111..2222222 100644
  	}
  
  	VIPS_GATE_STOP( "vips_reducev_vector_gen: work" ); 
-@@ -787,7 +794,7 @@ vips_reducev_raw( VipsReducev *reducev, VipsImage *in, VipsImage **out )
+@@ -787,7 +795,7 @@ vips_reducev_raw( VipsReducev *reducev, VipsImage *in, VipsImage **out )
  
  	*out = vips_image_new();
  	if( vips_image_pipelinev( *out, 
