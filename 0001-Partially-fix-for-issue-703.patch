@@ -1,14 +1,99 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Kleis Auke Wolthuizen <github@kleisauke.nl>
-Date: Fri, 5 Jul 2019 15:20:00 +0200
+Date: Mon, 16 Dec 2019 14:30:00 +0100
 Subject: [PATCH] Partially fix for libvips/libvips#703
 
 
+diff --git a/libvips/resample/presample.h b/libvips/resample/presample.h
+index 1111111..2222222 100644
+--- a/libvips/resample/presample.h
++++ b/libvips/resample/presample.h
+@@ -69,7 +69,8 @@ GType vips_resample_get_type( void );
+  */
+ #define MAX_POINT (2000)
+ 
+-int vips_reduce_get_points( VipsKernel kernel, double shrink );
++int vips_reduce_get_radius( VipsKernel kernel, double shrink );
++int vips_reduce_get_points( VipsKernel kernel, int kernel_radius );
+ void vips_reduce_make_mask( double *c, 
+ 	VipsKernel kernel, double shrink, double x );
+ 
 diff --git a/libvips/resample/reduceh.cpp b/libvips/resample/reduceh.cpp
 index 1111111..2222222 100644
 --- a/libvips/resample/reduceh.cpp
 +++ b/libvips/resample/reduceh.cpp
-@@ -194,13 +194,11 @@ reduceh_signed_int_tab( VipsReduceh *reduceh,
+@@ -70,6 +70,10 @@ typedef struct _VipsReduceh {
+ 	 */
+ 	gboolean centre;
+ 
++	/* Radius of the kernel.
++	 */
++	int radius;
++
+ 	/* Number of points in kernel.
+ 	 */
+ 	int n_point;
+@@ -91,29 +95,50 @@ extern "C" {
+ G_DEFINE_TYPE( VipsReduceh, vips_reduceh, VIPS_TYPE_RESAMPLE );
+ }
+ 
+-/* Get n points. @shrink is the shrink factor, so 2 for a 50% reduction. 
++/* Get kernel radius. @shrink is the shrink factor, so 2 for a 50% reduction.
+  */
+ int
+-vips_reduce_get_points( VipsKernel kernel, double shrink ) 
++vips_reduce_get_radius( VipsKernel kernel, double shrink )
+ {
+ 	switch( kernel ) {
+ 	case VIPS_KERNEL_NEAREST:
+-		return( 1 ); 
++		return( -1 );
+ 
+ 	case VIPS_KERNEL_LINEAR:
+-		return( rint( 2 * shrink ) + 1 ); 
++		return( VIPS_RINT( shrink ) );
+ 
+ 	case VIPS_KERNEL_CUBIC:
+ 	case VIPS_KERNEL_MITCHELL:
+-		return( rint( 4 * shrink ) + 1 ); 
++	case VIPS_KERNEL_LANCZOS2:
++		return( VIPS_RINT( 2 * shrink ) );
++
++	case VIPS_KERNEL_LANCZOS3:
++		return( VIPS_RINT( 3 * shrink ) );
++
++	default:
++		g_assert_not_reached();
++		return( 0 ); 
++	}
++}
++
++/* Get n points. @kernel_radius is the radius of the kernel. See: 
++ * vips_reduce_get_kernel_radius()
++ */
++int
++vips_reduce_get_points( VipsKernel kernel, int kernel_radius ) 
++{
++	switch( kernel ) {
++	case VIPS_KERNEL_NEAREST:
++		return( 1 ); 
+ 
++	case VIPS_KERNEL_LINEAR:
++	case VIPS_KERNEL_CUBIC:
++	case VIPS_KERNEL_MITCHELL:
+ 	case VIPS_KERNEL_LANCZOS2:
++	case VIPS_KERNEL_LANCZOS3:
+ 		/* Needs to be in sync with calculate_coefficients_lanczos().
+ 		 */
+-		return( rint( 2 * 2 * shrink ) + 1 ); 
+-
+-	case VIPS_KERNEL_LANCZOS3:
+-		return( rint( 2 * 3 * shrink ) + 1 ); 
++		return( 2 * kernel_radius + 1 ); 
+ 
+ 	default:
+ 		g_assert_not_reached();
+@@ -194,13 +219,11 @@ reduceh_signed_int_tab( VipsReduceh *reduceh,
  	for( int z = 0; z < bands; z++ ) {
  		int sum;
  
@@ -23,7 +108,7 @@ index 1111111..2222222 100644
  	}
  }
  
-@@ -216,10 +214,8 @@ reduceh_float_tab( VipsReduceh *reduceh,
+@@ -216,10 +239,8 @@ reduceh_float_tab( VipsReduceh *reduceh,
  	const T* restrict in = (T *) pin;
  	const int n = reduceh->n_point;
  
@@ -36,7 +121,7 @@ index 1111111..2222222 100644
  }
  
  /* 32-bit int output needs a double intermediate.
-@@ -238,10 +234,8 @@ reduceh_unsigned_int32_tab( VipsReduceh *reduceh,
+@@ -238,10 +259,8 @@ reduceh_unsigned_int32_tab( VipsReduceh *reduceh,
  	for( int z = 0; z < bands; z++ ) {
  		double sum;
  
@@ -49,7 +134,7 @@ index 1111111..2222222 100644
  	}
  }
  
-@@ -258,11 +252,9 @@ reduceh_signed_int32_tab( VipsReduceh *reduceh,
+@@ -258,11 +277,9 @@ reduceh_signed_int32_tab( VipsReduceh *reduceh,
  	for( int z = 0; z < bands; z++ ) {
  		double sum;
  
@@ -62,7 +147,7 @@ index 1111111..2222222 100644
  	}
  }
  
-@@ -282,11 +274,8 @@ reduceh_notab( VipsReduceh *reduceh,
+@@ -282,11 +299,8 @@ reduceh_notab( VipsReduceh *reduceh,
  
  	vips_reduce_make_mask( cx, reduceh->kernel, reduceh->hshrink, x ); 
  
@@ -76,7 +161,7 @@ index 1111111..2222222 100644
  }
  
  /* Tried a vector path (see reducev) but it was slower. The vectors for
-@@ -307,6 +296,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
+@@ -307,6 +321,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
  	 */
  	const int bands = in->Bands * 
  		(vips_band_format_iscomplex( in->BandFmt ) ?  2 : 1);
@@ -84,7 +169,19 @@ index 1111111..2222222 100644
  
  	VipsRect s;
  
-@@ -334,9 +324,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
+@@ -317,10 +332,8 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
+ 
+ 	s.left = r->left * reduceh->hshrink;
+ 	s.top = r->top;
+-	s.width = r->width * reduceh->hshrink + reduceh->n_point;
++	s.width = r->width * reduceh->hshrink + reduceh->n_point - 1;
+ 	s.height = r->height;
+-	if( reduceh->centre )
+-		s.width += 1;
+ 	if( vips_region_prepare( ir, &s ) )
+ 		return( -1 );
+ 
+@@ -334,9 +347,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
  
  		q = VIPS_REGION_ADDR( out_region, r->left, r->top + y );
  
@@ -95,7 +192,7 @@ index 1111111..2222222 100644
  
  		/* We want p0 to be the start (ie. x == 0) of the input 
  		 * scanline we are reading from. We can then calculate the p we
-@@ -351,7 +339,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
+@@ -351,7 +362,7 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
  			ir->valid.left * ps;
  
  		for( int x = 0; x < r->width; x++ ) {
@@ -104,11 +201,65 @@ index 1111111..2222222 100644
  			VipsPel *p = p0 + ix * ps;
  			const int sx = X * VIPS_TRANSFORM_SCALE * 2;
  			const int six = sx & (VIPS_TRANSFORM_SCALE * 2 - 1);
+@@ -441,7 +452,6 @@ vips_reduceh_build( VipsObject *object )
+ 		vips_object_local_array( object, 2 );
+ 
+ 	VipsImage *in;
+-	int width;
+ 
+ 	if( VIPS_OBJECT_CLASS( vips_reduceh_parent_class )->build( object ) )
+ 		return( -1 );
+@@ -459,9 +469,13 @@ vips_reduceh_build( VipsObject *object )
+ 
+ 	/* Build the tables of pre-computed coefficients.
+ 	 */
+-	reduceh->n_point = 
+-		vips_reduce_get_points( reduceh->kernel, reduceh->hshrink ); 
+-	g_info( "reduceh: %d point mask", reduceh->n_point );
++	reduceh->radius =
++		vips_reduce_get_radius( reduceh->kernel, reduceh->hshrink );
++	reduceh->n_point =
++		vips_reduce_get_points( reduceh->kernel, reduceh->radius );
++
++	g_info( "reduceh: %d point mask, %d radius", reduceh->n_point,
++		reduceh->radius );
+ 	if( reduceh->n_point > MAX_POINT ) {
+ 		vips_error( object_class->nickname, 
+ 			"%s", _( "reduce factor too large" ) );
+@@ -499,15 +513,10 @@ vips_reduceh_build( VipsObject *object )
+ 	in = t[0];
+ 
+ 	/* Add new pixels around the input so we can interpolate at the edges.
+-	 * In centre mode, we read 0.5 pixels more to the right, so we must
+-	 * enlarge a little further.
+ 	 */
+-	width = in->Xsize + reduceh->n_point - 1;
+-	if( reduceh->centre )
+-		width += 1;
+ 	if( vips_embed( in, &t[1], 
+-		reduceh->n_point / 2 - 1, 0, 
+-		width, in->Ysize,
++		reduceh->radius, 0, 
++		in->Xsize + reduceh->n_point - 1, in->Ysize,
+ 		"extend", VIPS_EXTEND_COPY,
+ 		(void *) NULL ) )
+ 		return( -1 );
 diff --git a/libvips/resample/reducev.cpp b/libvips/resample/reducev.cpp
 index 1111111..2222222 100644
 --- a/libvips/resample/reducev.cpp
 +++ b/libvips/resample/reducev.cpp
-@@ -522,6 +522,7 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+@@ -108,6 +108,10 @@ typedef struct _VipsReducev {
+ 	 */
+ 	gboolean centre;
+ 
++	/* Radius of the kernel.
++	 */
++	int radius;
++
+ 	/* Number of points in kernel.
+ 	 */
+ 	int n_point;
+@@ -522,6 +526,7 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
  	const int bands = in->Bands * 
  		(vips_band_format_iscomplex( in->BandFmt ) ?  2 : 1);
  	int ne = r->width * bands;
@@ -116,7 +267,16 @@ index 1111111..2222222 100644
  
  	VipsRect s;
  
-@@ -541,12 +542,13 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+@@ -533,20 +538,19 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+ 	s.left = r->left;
+ 	s.top = r->top * reducev->vshrink;
+ 	s.width = r->width;
+-	s.height = r->height * reducev->vshrink + reducev->n_point;
+-	if( reducev->centre )
+-		s.height += 1;
++	s.height = r->height * reducev->vshrink + reducev->n_point - 1;
+ 	if( vips_region_prepare( ir, &s ) )
+ 		return( -1 );
  
  	VIPS_GATE_START( "vips_reducev_gen: work" ); 
  
@@ -128,12 +288,12 @@ index 1111111..2222222 100644
 -		const double Y = (r->top + y) * reducev->vshrink + 
 -			(reducev->centre ? 0.5 : 0.0); 
 -		VipsPel *p = VIPS_REGION_ADDR( ir, r->left, (int) Y ); 
-+		const int py = (int) Y;
++		const int py = (int) Y; 
 +		VipsPel *p = VIPS_REGION_ADDR( ir, r->left, py ); 
  		const int sy = Y * VIPS_TRANSFORM_SCALE * 2;
  		const int siy = sy & (VIPS_TRANSFORM_SCALE * 2 - 1);
  		const int ty = (siy + 1) >> 1;
-@@ -606,13 +608,15 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
+@@ -606,13 +610,15 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
  		case VIPS_FORMAT_DPCOMPLEX:
  		case VIPS_FORMAT_DOUBLE:
  			reducev_notab<double>( reducev,
@@ -150,7 +310,7 @@ index 1111111..2222222 100644
  	}
  
  	VIPS_GATE_STOP( "vips_reducev_gen: work" ); 
-@@ -633,7 +637,9 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+@@ -633,7 +639,9 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
  	Sequence *seq = (Sequence *) vseq;
  	VipsRegion *ir = seq->ir;
  	VipsRect *r = &out_region->valid;
@@ -160,6 +320,17 @@ index 1111111..2222222 100644
  
  	VipsExecutor executor[MAX_PASS];
  	VipsRect s;
+@@ -646,9 +654,7 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
+ 	s.left = r->left;
+ 	s.top = r->top * reducev->vshrink;
+ 	s.width = r->width;
+-	s.height = r->height * reducev->vshrink + reducev->n_point;
+-	if( reducev->centre )
+-		s.height += 1;
++	s.height = r->height * reducev->vshrink + reducev->n_point - 1;
+ 	if( vips_region_prepare( ir, &s ) )
+ 		return( -1 );
+ 
 @@ -663,11 +669,11 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
  
  	VIPS_GATE_START( "vips_reducev_vector_gen: work" ); 
@@ -201,3 +372,113 @@ index 1111111..2222222 100644
  		return( -1 );
  
  	/* Size output. We need to always round to nearest, so round(), not
+@@ -830,7 +838,6 @@ vips_reducev_build( VipsObject *object )
+ 	VipsImage **t = (VipsImage **) vips_object_local_array( object, 4 );
+ 
+ 	VipsImage *in;
+-	int height;
+ 
+ 	if( VIPS_OBJECT_CLASS( vips_reducev_parent_class )->build( object ) )
+ 		return( -1 );
+@@ -846,9 +853,13 @@ vips_reducev_build( VipsObject *object )
+ 	if( reducev->vshrink == 1 ) 
+ 		return( vips_image_write( in, resample->out ) );
+ 
+-	reducev->n_point = 
+-		vips_reduce_get_points( reducev->kernel, reducev->vshrink ); 
+-	g_info( "reducev: %d point mask", reducev->n_point );
++	reducev->radius =
++		vips_reduce_get_radius( reducev->kernel, reducev->vshrink );
++	reducev->n_point =
++		vips_reduce_get_points( reducev->kernel, reducev->radius );
++
++	g_info( "reducev: %d point mask, %d radius", reducev->n_point,
++		reducev->radius );
+ 	if( reducev->n_point > MAX_POINT ) {
+ 		vips_error( object_class->nickname, 
+ 			"%s", _( "reduce factor too large" ) );
+@@ -863,12 +874,9 @@ vips_reducev_build( VipsObject *object )
+ 
+ 	/* Add new pixels around the input so we can interpolate at the edges.
+ 	 */
+-	height = in->Ysize + reducev->n_point - 1;
+-	if( reducev->centre )
+-		height += 1;
+ 	if( vips_embed( in, &t[1], 
+-		0, reducev->n_point / 2 - 1, 
+-		in->Xsize, height, 
++		0, reducev->radius, 
++		in->Xsize, in->Ysize + reducev->n_point - 1, 
+ 		"extend", VIPS_EXTEND_COPY,
+ 		(void *) NULL ) )
+ 		return( -1 );
+diff --git a/libvips/resample/templates.h b/libvips/resample/templates.h
+index 1111111..2222222 100644
+--- a/libvips/resample/templates.h
++++ b/libvips/resample/templates.h
+@@ -319,16 +319,18 @@ static void inline
+ calculate_coefficients_triangle( double *c, 
+ 	const double shrink, const double x )
+ {
+-	/* Needs to be in sync with vips_reduce_get_points().
++	/* Needs to be in sync with vips_reduce_get_radius() and
++	 * vips_reduce_get_points().
+ 	 */
+-	const int n_points = rint( 2 * shrink ) + 1;
++	const int kernel_radius = rint( shrink );
++	const int n_points = 2 * kernel_radius + 1;
+ 
+ 	int i;
+ 	double sum; 
+ 
+ 	sum = 0;
+ 	for( i = 0; i < n_points; i++ ) {
+-		double xp = (i - (shrink - 0.5) - x) / shrink;
++		double xp = (i - kernel_radius - x) / shrink;
+ 
+ 		double l;
+ 
+@@ -356,16 +358,18 @@ static void inline
+ calculate_coefficients_cubic( double *c, 
+ 	const double shrink, const double x, double B, double C )
+ {
+-	/* Needs to be in sync with vips_reduce_get_points().
++	/* Needs to be in sync with vips_reduce_get_radius() and
++	 * vips_reduce_get_points().
+ 	 */
+-	const int n_points = rint( 4 * shrink ) + 1; 
++	const int kernel_radius = rint( 2 * shrink );
++	const int n_points = 2 * kernel_radius + 1;
+ 
+ 	int i;
+ 	double sum; 
+ 
+ 	sum = 0;
+ 	for( i = 0; i < n_points; i++ ) {
+-		const double xp = (i - (2 * shrink - 1) - x) / shrink;
++		const double xp = (i - kernel_radius - x) / shrink;
+ 		const double axp = VIPS_FABS( xp ); 
+ 		const double axp2 = axp * axp;
+ 		const double axp3 = axp2 * axp;
+@@ -404,16 +408,18 @@ static void inline
+ calculate_coefficients_lanczos( double *c, 
+ 	const int a, const double shrink, const double x )
+ {
+-	/* Needs to be in sync with vips_reduce_get_points().
++	/* Needs to be in sync with vips_reduce_get_radius() and
++	 * vips_reduce_get_points().
+ 	 */
+-	const int n_points = rint( 2 * a * shrink ) + 1; 
++	const int kernel_radius = rint( a * shrink );
++	const int n_points = 2 * kernel_radius + 1;
+ 
+ 	int i;
+ 	double sum; 
+ 
+ 	sum = 0;
+ 	for( i = 0; i < n_points; i++ ) {
+-		double xp = (i - (n_points - 2) / 2 - x) / shrink;
++		double xp = (i - kernel_radius - x) / shrink;
+ 
+ 		double l;
+ 

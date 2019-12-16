@@ -57,5 +57,5 @@ CTestTestfile.cmake
 test-anim
 test-single
 tn_*.jpg
-output-patch/**/
-output/**/
+output-patch/**/*.jpg
+output/**/*.jpg
