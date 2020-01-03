@@ -22,7 +22,7 @@ for i in range(1, 9):
     elif i == 7: im = im.rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
     elif i == 4: im = im.rotate(180, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
 
-    im.save('output-patch/Landscape_{}.jpg'.format(i))
+    im.save('output-patch/lanczos3/Landscape_{}.jpg'.format(i))
 
 for i in range(1, 9):
     im = Image.open('input/Portrait_{}.jpg'.format(i))
@@ -44,4 +44,4 @@ for i in range(1, 9):
     elif i == 7: im = im.rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
     elif i == 4: im = im.rotate(180, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
 
-    im.save('output-patch/Portrait_{}.jpg'.format(i))
+    im.save('output-patch/lanczos3/Portrait_{}.jpg'.format(i))

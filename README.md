@@ -29,6 +29,9 @@ G_MESSAGES_DEBUG=all ./test-single
 
 # Generate an animated WebP image from the output of `./test-single`
 ./test-anim
+
+# https://github.com/libvips/pyvips/issues/148
+VIPS_CONCURRENCY=1 python3 test-resize.py input/radial.rgb.png
 ```
 
 See [output/](output) directory.

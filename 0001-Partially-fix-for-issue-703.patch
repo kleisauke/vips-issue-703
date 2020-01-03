@@ -169,12 +169,9 @@ index 1111111..2222222 100644
  
  	VipsRect s;
  
-@@ -317,10 +332,8 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
- 
- 	s.left = r->left * reduceh->hshrink;
+@@ -319,8 +334,6 @@ vips_reduceh_gen( VipsRegion *out_region, void *seq,
  	s.top = r->top;
--	s.width = r->width * reduceh->hshrink + reduceh->n_point;
-+	s.width = r->width * reduceh->hshrink + reduceh->n_point - 1;
+ 	s.width = r->width * reduceh->hshrink + reduceh->n_point;
  	s.height = r->height;
 -	if( reduceh->centre )
 -		s.width += 1;
@@ -267,14 +264,12 @@ index 1111111..2222222 100644
  
  	VipsRect s;
  
-@@ -533,20 +538,19 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
- 	s.left = r->left;
+@@ -534,19 +539,18 @@ vips_reducev_gen( VipsRegion *out_region, void *vseq,
  	s.top = r->top * reducev->vshrink;
  	s.width = r->width;
--	s.height = r->height * reducev->vshrink + reducev->n_point;
+ 	s.height = r->height * reducev->vshrink + reducev->n_point;
 -	if( reducev->centre )
 -		s.height += 1;
-+	s.height = r->height * reducev->vshrink + reducev->n_point - 1;
  	if( vips_region_prepare( ir, &s ) )
  		return( -1 );
  
@@ -320,14 +315,12 @@ index 1111111..2222222 100644
  
  	VipsExecutor executor[MAX_PASS];
  	VipsRect s;
-@@ -646,9 +654,7 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
- 	s.left = r->left;
+@@ -647,8 +655,6 @@ vips_reducev_vector_gen( VipsRegion *out_region, void *vseq,
  	s.top = r->top * reducev->vshrink;
  	s.width = r->width;
--	s.height = r->height * reducev->vshrink + reducev->n_point;
+ 	s.height = r->height * reducev->vshrink + reducev->n_point;
 -	if( reducev->centre )
 -		s.height += 1;
-+	s.height = r->height * reducev->vshrink + reducev->n_point - 1;
  	if( vips_region_prepare( ir, &s ) )
  		return( -1 );
  
