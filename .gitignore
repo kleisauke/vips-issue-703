@@ -58,4 +58,5 @@ test-anim
 test-single
 tn_*.jpg
 output-patch/**/*.jpg
+output-patch2/**/*.jpg
 output/**/*.jpg
