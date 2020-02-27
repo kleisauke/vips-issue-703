@@ -30,3 +30,29 @@ index 1111111..2222222 100644
  		(void *) NULL ) )
  		return( -1 );
  	in = t[1];
+diff --git a/libvips/resample/shrinkh.c b/libvips/resample/shrinkh.c
+index 1111111..2222222 100644
+--- a/libvips/resample/shrinkh.c
++++ b/libvips/resample/shrinkh.c
+@@ -258,7 +258,7 @@ vips_shrinkh_build( VipsObject *object )
+ 	if( vips_embed( in, &t[1], 
+ 		0, 0, 
+ 		in->Xsize + shrink->hshrink, in->Ysize,
+-		"extend", VIPS_EXTEND_COPY,
++		"extend", VIPS_EXTEND_BLACK,
+ 		NULL ) )
+ 		return( -1 );
+ 	in = t[1];
+diff --git a/libvips/resample/shrinkv.c b/libvips/resample/shrinkv.c
+index 1111111..2222222 100644
+--- a/libvips/resample/shrinkv.c
++++ b/libvips/resample/shrinkv.c
+@@ -353,7 +353,7 @@ vips_shrinkv_build( VipsObject *object )
+ 	if( vips_embed( in, &t[1], 
+ 		0, 0, 
+ 		in->Xsize, VIPS_ROUND_UP( in->Ysize, shrink->vshrink ), 
+-		"extend", VIPS_EXTEND_COPY,
++		"extend", VIPS_EXTEND_BLACK,
+ 		NULL ) )
+ 		return( -1 );
+ 	in = t[1];
