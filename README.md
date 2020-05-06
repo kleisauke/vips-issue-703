@@ -135,9 +135,9 @@ See [output/](output) directory.
   ![Landscape](output/Landscape-enlarge.webp)
 </details>
 
-## Output after patching
+## Output after pull request
 
-See this [patch](0001-Partially-fix-for-issue-703.patch).
+See [libvips/libvips#1592](https://github.com/libvips/libvips/pull/1592).
 
 ### Thumbnail
 <details>

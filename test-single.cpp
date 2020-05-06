@@ -1,6 +1,9 @@
+#include <iostream>
 #include <vips/vips8>
+#include <vips/vector.h>
 
 using vips::VImage;
+using vips::VError;
 
 /**
  * `vips_autorot` + the various mirror modes, see:
@@ -75,7 +78,7 @@ VImage autorot_enhanced(VImage &image, int exif_tag) {
  */
 void process(const std::string &input_file, const std::string &output_file,
              VipsKernel resize_kernel) {
-    const int target_width = 320;
+    const int target_width = 450;
 
     VImage image = VImage::new_from_file(
         input_file.c_str(),
@@ -101,9 +104,16 @@ void process(const std::string &input_file, const std::string &output_file,
     // Auto height
     double vshrink = hshrink;
 
-    image = image.resize(1.0 / hshrink, VImage::option()
-                                            ->set("vscale", 1.0 / vshrink)
-                                            ->set("kernel", resize_kernel));
+    try {
+        image = image.resize(1.0 / hshrink, VImage::option()
+                                                ->set("vscale", 1.0 / vshrink)
+                                                ->set("kernel", resize_kernel));
+    } catch (VError &error) {
+        std::cerr << "Resizing `" << input_file << "` to a width of `"
+                  << target_width << "` with kernel `"
+                  << vips_enum_string(VIPS_TYPE_KERNEL, resize_kernel)
+                  << "` will produce pixels shifts." << std::endl;
+    }
 
     if (image.get_typeof(VIPS_META_ICC_NAME) != 0) {
         // We're in device space and we need a combined import/export to
@@ -132,6 +142,8 @@ int main(int argc, const char *argv[]) {
     const std::string input_dir = "input";
     const std::string output_dir = "output-patch";
     /*const std::string output_dir = "output";*/
+
+    vips_vector_set_enabled(0);
 
     std::vector<std::string> orientations = {"Landscape", "Portrait"};
 

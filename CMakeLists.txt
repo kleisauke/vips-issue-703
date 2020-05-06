@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Find libvips (required)
 find_package(PkgConfig)
-pkg_check_modules(VIPS vips-cpp>=8.8 REQUIRED)
+pkg_check_modules(VIPS vips-cpp>=8.9 REQUIRED)
 
 add_executable(test-single test-single.cpp)
 
