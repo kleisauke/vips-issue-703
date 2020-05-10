@@ -141,7 +141,7 @@ See [libvips/libvips#1592](https://github.com/libvips/libvips/pull/1592).
 
 ### Thumbnail
 <details>
-  <summary>Portrait seems to be fixed, landscape not</summary>
+  <summary>Still produces pixel shifts</summary>
 
   ![Portrait](output-patch/lanczos3_Portrait.webp)
   ![Landscape](output-patch/lanczos3_Landscape.webp)
@@ -156,7 +156,7 @@ See [libvips/libvips#1592](https://github.com/libvips/libvips/pull/1592).
 
 ### Shrink an image horizontally
 <details>
-  <summary>Pixel shifts are gone</summary>
+  <summary>Still produces pixel shifts on the horizontal axis</summary>
 
   ![Landscape-horizontal](output-patch/Landscape-horizontal.webp)
 </details>
