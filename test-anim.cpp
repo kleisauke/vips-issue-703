@@ -27,23 +27,21 @@ int main(int argc, const char *argv[]) {
 
     std::vector<std::string> orientations = {"Landscape", "Portrait"};
 
-    std::vector<VipsKernel> kernels = {
-        VIPS_KERNEL_NEAREST,  VIPS_KERNEL_LINEAR,   VIPS_KERNEL_CUBIC,
-        VIPS_KERNEL_MITCHELL, VIPS_KERNEL_LANCZOS2, VIPS_KERNEL_LANCZOS3};
+    std::vector<std::string> kernels = {"nearest",  "linear",   "cubic",
+                                        "mitchell", "lanczos2", "lanczos3",
+                                        "thumbnail-lanczos3"};
 
-    for (VipsKernel kernel : kernels) {
-        std::string kernel_str = vips_enum_nick(VIPS_TYPE_KERNEL, kernel);
-
+    for (const std::string &kernel : kernels) {
         for (const std::string &orientation : orientations) {
             std::string output =
-                output_dir + "/" + kernel_str + "_" + orientation + ".webp";
+                output_dir + "/" + kernel + "_" + orientation + ".webp";
 
             std::vector<VImage> images;
             images.reserve(8);
 
             for (int i = 1; i <= 8; ++i) {
                 std::string exif_tag = std::to_string(i);
-                std::string input = output_dir + "/" + kernel_str + "/" +
+                std::string input = output_dir + "/" + kernel + "/" +
                                     orientation + "_" + exif_tag + ".jpg";
 
                 images.emplace_back(VImage::new_from_file(

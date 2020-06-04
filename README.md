@@ -171,8 +171,8 @@ See [output/](output) directory.
 <details>
   <summary>Produces pixel shifts</summary>
 
-  ![Portrait](output/lanczos3_Portrait.webp)
-  ![Landscape](output/lanczos3_Landscape.webp)
+  ![Portrait](output/thumbnail-lanczos3_Portrait.webp)
+  ![Landscape](output/thumbnail-lanczos3_Landscape.webp)
 </details>
 
 ### Shrink an image vertically
@@ -205,8 +205,8 @@ See [libvips/libvips#1592](https://github.com/libvips/libvips/pull/1592).
 <details>
   <summary>Does not produce pixel shifts</summary>
 
-  ![Portrait](output-patch/lanczos3_Portrait.webp)
-  ![Landscape](output-patch/lanczos3_Landscape.webp)
+  ![Portrait](output-patch/thumbnail-lanczos3_Portrait.webp)
+  ![Landscape](output-patch/thumbnail-lanczos3_Landscape.webp)
 </details>
 
 ### Shrink an image vertically

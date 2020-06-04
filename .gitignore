@@ -55,7 +55,8 @@ CTestTestfile.cmake
 
 # User-specific stuff
 test-anim
-test-single
+test-resize
+test-thumbnail
 tn_*.jpg
 output-patch/**/*.jpg
 output-patch2/**/*.jpg

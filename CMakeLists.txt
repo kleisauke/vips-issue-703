@@ -9,14 +9,26 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 find_package(PkgConfig)
 pkg_check_modules(VIPS vips-cpp>=8.9 REQUIRED)
 
-add_executable(test-single test-single.cpp)
+add_executable(test-resize test-resize.cpp)
 
-target_include_directories(test-single
+target_include_directories(test-resize
         PRIVATE
             ${VIPS_INCLUDE_DIRS}
         )
 
-target_link_libraries(test-single
+target_link_libraries(test-resize
+        PRIVATE
+            ${VIPS_LDFLAGS}
+        )
+
+add_executable(test-thumbnail test-thumbnail.cpp)
+
+target_include_directories(test-thumbnail
+        PRIVATE
+            ${VIPS_INCLUDE_DIRS}
+        )
+
+target_link_libraries(test-thumbnail
         PRIVATE
             ${VIPS_LDFLAGS}
         )
